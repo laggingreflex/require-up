@@ -13,7 +13,7 @@ function requireUpPatch( request, parent, isMain ) {
     const modReq = request.split( '.../' ).pop();
     const path = requireUp( modReq, {
       getResolvedPath: true,
-      paths: adjustModulePaths( module.parent.paths )
+      paths: adjustModulePaths( parent.paths )
     } );
     return path;
   } else {
