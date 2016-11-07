@@ -1,6 +1,6 @@
 {
   "name": "require-up",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Looks up files in parent dirs outside node_modules",
   "main": "index.js",
   "repository": "laggingreflex/require-up",
