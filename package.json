@@ -1,0 +1,9 @@
+{
+  "name": "require-up",
+  "version": "0.0.0",
+  "description": "Like require but looks up module.parent.parent...",
+  "main": "index.js",
+  "repository": "laggingreflex/require-up",
+  "author": "laggingreflex@gmail.com",
+  "license": "ISC"
+}
