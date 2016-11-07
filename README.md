@@ -1,25 +1,25 @@
 # require-up
 
-Like `require` but looks up `module.parent.parent...`
+Looks up files in parent dirs outside `node_modules`.
 
 ```
 ├───your-package
 │   ├───package.json
 │   ├───src
 │   │   ├───config
-│   │   │   ├───this-file.js
+│   │   │   ├───in-this-file.js:
 ```
 ```js
 const requireUp = require('require-up');
 
-const pkg = requireUp('./package.json')
+const pkg = requireUp('./package.json');
 ```
 This will require your `package.json` from anywhere in your module.
 
 ---
 
 
-You can also `register` it and use this new syntax: `.../`
+You can also `register` it and use this new 3 dot syntax: `.../`
 
 Before any other imports/requires:
 ```js
@@ -30,6 +30,6 @@ Then anywhere else:
 import pkg from '.../package.json';
 ```
 
-WARNING: This [monkey-patches] `Module._resolveFilename` in [module.js]
+BEWARE: This monkey-patches `Module._resolveFilename` in [module.js] core.
 
 [module.js]: https://github.com/nodejs/node/blob/master/lib/module.js#L458

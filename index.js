@@ -1,26 +1,22 @@
-const { resolve, dirname } = require( 'path' );
+const { resolve } = require( 'path' );
+const { adjustModulePaths } = require( './utils' );
 
 module.exports = requireUp;
 
-function requireUp( path, {getResolvedPath, startingModule} ) {
-  function up( module ) {
-    if ( !module ) {
-      const err = new Error( "Cannot find module '" + path + "'" );
-      err.code = 'MODULE_NOT_FOUND';
-      throw err;
-    }
-
-    try {
-      const tryPath = module.require.resolve( path );
-      const mod = require( tryPath );
-      return getResolvedPath, startingModule && tryPath || mod;
-    } catch ( err ) {}
-    try {
-      const tryPath = require.resolve( resolve( dirname( module.filename ), path ) );
-      const mod = require( tryPath );
-      return getResolvedPath, startingModule && tryPath || mod;
-    } catch ( err ) {}
-    return up( module.parent );
-  }
-  return up( startingModule || module.parent );
+function requireUp( requestedModule, {
+  getResolvedPath = false,
+  paths = adjustModulePaths( module.parent.paths )
+} = {} ) {
+  for ( dirname of paths ) try {
+    const tryPath = resolve( dirname, requestedModule );
+    const modulePath = require.resolve( tryPath );
+    const module = require( modulePath );
+    if ( getResolvedPath )
+      return modulePath;
+    else
+      return module;
+  } catch ( error ) {}
+  const err = new Error( "Cannot find module '" + requestedModule + "'" );
+  err.code = 'MODULE_NOT_FOUND';
+  throw err;
 }

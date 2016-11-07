@@ -1,5 +1,7 @@
 const requireUp = require( '.' );
 const Module = require( 'module' );
+const { adjustModulePaths } = require( './utils' );
+
 const old = Module._resolveFilename;
 
 if ( Module._resolveFilename.name !== 'requireUpPatch' ) {
@@ -11,7 +13,7 @@ function requireUpPatch( request, parent, isMain ) {
     const modReq = request.split( '/' ).pop();
     const path = requireUp( modReq, {
       getResolvedPath: true,
-      startingModule: module.parent
+      paths: adjustModulePaths( module.parent.paths )
     } );
     return path;
   } else {
