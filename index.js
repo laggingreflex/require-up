@@ -1,22 +1,3 @@
-const { resolve } = require( 'path' );
-const { adjustModulePaths } = require( './utils' );
+console.warn( `WARNING: You're using 'require-up' as a module. Due to NodeJS's module caching it'll only be able to require up modules from the first parent it was required from. It's recommended to use the 'require-up/register' method instead.` );
 
-module.exports = requireUp;
-
-function requireUp( requestedModule, {
-  getResolvedPath = false,
-  paths = adjustModulePaths( module.parent.paths )
-} = {} ) {
-  for ( dirname of paths ) try {
-    const tryPath = resolve( dirname, requestedModule );
-    const modulePath = require.resolve( tryPath );
-    const module = require( modulePath );
-    if ( getResolvedPath )
-      return modulePath;
-    else
-      return module;
-  } catch ( error ) {}
-  const err = new Error( "Cannot find module '" + requestedModule + "'" );
-  err.code = 'MODULE_NOT_FOUND';
-  throw err;
-}
+module.exports = require( './main' );
