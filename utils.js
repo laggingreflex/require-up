@@ -1,7 +1,7 @@
-const { join } = require( 'path' );
+const { join } = require('path');
 
 module.exports = { adjustModulePaths };
 
-function adjustModulePaths( paths ) {
-  return paths.map( path => join( path, '..' ) );
+function adjustModulePaths(paths) {
+  return paths.map(path => join(path, '..'));
 }
