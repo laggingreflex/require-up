@@ -1,6 +1,7 @@
 # Require-up
+[![npm](https://img.shields.io/npm/v/require-up.svg)](https://www.npmjs.com/package/require-up)
 
-Like [find-up] but for `require`.
+Require-up introduces a new syntax `'.../'` for requiring modules anywhere up from parent directories. Much like NodeJS's default `require`, but it also looks *outside* `node_modules` directories. Or like [find-up] but for `require`.
 
 ## Install
 
@@ -10,39 +11,39 @@ $ npm install --save require-up
 
 ## Usage
 
-Suppose you have a structure like this:
+If you have a structure like this:
 
 ```
-project
 ├───index.js
 ├───utils.js
 └───foo
     └───bar
         └───some-file.js
 ```
-If you wanted `utils.js` from `some-file.js` you'd have to do:
+Register `require-up` in your main `index.js`:
 ```js
-import {stuff} from './../../utils';
-```
-
-### **The solution**
-
-`index.js`:
-```js
+// index.js
 import 'require-up/register';
 ```
-`some-file.js`:
+
+Now in `some-file.js` you can do:
 ```js
-import pkg from '.../utils';
+// some-file.js
+import {stuff} from '.../utils';
 ```
 
-Require-up introduces a new special syntax: `'.../'` that lets you require your `utils.js` from anywhere down below.
+## **CAUTION**
 
 **BEWARE**: This module monkey-patches `Module._resolveFilename` in the core [module.js].
 
-You may also use it as a module (which doesn't patch anything) but due to NodeJS's require caching it will only be able to require modules up from the first parent it was originally required from. For that reason it's actually recommended to **use the `/register` method** which even works accross different modules.
+You may also use it as a simple module which doesn't patch anything:
+```js
+import requireUp from 'require-up';
+requireUp('./utils'); // without ".../" syntax
+```
 
-Some other solutions: [\[1\]][1] [\[2\]][2] [\[3\]][3]
+**but** due to NodeJS's require caching it will only be able to require modules up from the **first parent** it was originally required from. For that reason it's recommended actually to use the `/register` method.
+
 
 [find-up]: https://www.npmjs.com/package/find-up
 [module.js]: https://github.com/nodejs/node/blob/master/lib/module.js#L458
