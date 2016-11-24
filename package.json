@@ -1,6 +1,6 @@
 {
   "name": "require-up",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Require a file by walking up parent directories",
   "main": "index.js",
   "repository": "laggingreflex/require-up",
