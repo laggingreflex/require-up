@@ -9,7 +9,7 @@ if (Module._resolveFilename.name !== 'requireUpPatch') {
 }
 
 function requireUpPatch(request, parent, isMain) {
-  if (request.match(/^...\//)) {
+  if (request.match(/^\.\.\.\//)) {
     const modReq = request.split('.../').pop();
     const path = requireUp(modReq, {
       getResolvedPath: true,
