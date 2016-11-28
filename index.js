@@ -1,4 +1,6 @@
+const Module = require('module');
 const { resolve } = require('path');
+const resolveFrom = require('resolve-from');
 const { adjustModulePaths } = require('./utils');
 
 module.exports = requireUp;
@@ -8,25 +10,20 @@ function requireUp(requestedModule, {
   paths = adjustModulePaths(module.parent.paths)
 } = {}) {
   const label = '.../' + requestedModule;
-  for (dirname of paths) try {
-    const tryPath = resolve(dirname, requestedModule);
-    const modulePath = require.resolve(tryPath);
-    const module = require(modulePath);
-    if (getResolvedPath) {
-      return modulePath;
-    } else {
-      return module;
-    }
-  } catch (err) {
-    const erRex = requestedModule
-      .replace(/^[./\\]+/, '')
-      .replace(/[\\/]/g, '[\\\\/]');
-    if (err.code !== 'MODULE_NOT_FOUND' || !err.message.match(erRex)) {
-      err.message = 'Error in \'' + label + '\': ' + err.message
-      throw err;
+  for (path of paths) {
+    const modulePath = resolveFrom(path, requestedModule) || resolveFrom(path, './' + requestedModule);
+    if (modulePath) {
+      const module = require(modulePath);
+      if (getResolvedPath) {
+        return modulePath;
+      } else {
+        return module;
+      }
     }
   }
-  const error = new Error("Cannot find module '" + label + "'");
-  error.code = 'MODULE_NOT_FOUND';
-  throw error;
+  // If a module was found this line would never have reached
+
+  // If it ever reaches here then an error needs to be thrown
+  // Best way to throw in this case is to just call the NodeJS's internal module, so that it shows the "Module not found" as naturally as it does with regular module requires.
+  return (Module.__resolveFilename || Module._resolveFilename)(label);
 }

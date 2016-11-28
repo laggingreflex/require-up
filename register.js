@@ -2,7 +2,7 @@ const requireUp = require('.');
 const Module = require('module');
 const { adjustModulePaths } = require('./utils');
 
-const old = Module._resolveFilename;
+const old = Module.__resolveFilename = Module._resolveFilename;
 
 if (Module._resolveFilename.name !== 'requireUpPatch') {
   Module._resolveFilename = requireUpPatch;

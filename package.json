@@ -5,5 +5,8 @@
   "main": "index.js",
   "repository": "laggingreflex/require-up",
   "author": "laggingreflex@gmail.com",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "resolve-from": "^2.0.0"
+  }
 }
