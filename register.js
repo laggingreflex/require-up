@@ -1,4 +1,4 @@
-const requireUp = require('./main');
+const requireUp = require('.');
 const Module = require('module');
 const { adjustModulePaths } = require('./utils');
 
