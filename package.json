@@ -6,6 +6,9 @@
   "repository": "laggingreflex/require-up",
   "author": "laggingreflex@gmail.com",
   "license": "ISC",
+  "scripts": {
+    "test": "node test"
+  },
   "dependencies": {
     "resolve-from": "^2.0.0"
   }
