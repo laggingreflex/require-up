@@ -1,7 +1,9 @@
 # Require-up
 [![npm](https://img.shields.io/npm/v/require-up.svg)](https://www.npmjs.com/package/require-up)
 
-Require-up introduces a new syntax `'.../'` for requiring modules anywhere up from parent directories. Much like NodeJS's default `require`, but it also looks *outside* `node_modules` directories. Or like [find-up] but for `require`.
+Require modules from anywhere up the parent directories. Like [find-up] but for `require`.
+
+Optionally, a new syntax (`'.../'`) which will work with regular require/import calls.
 
 ## Install
 
@@ -14,35 +16,45 @@ $ npm install --save require-up
 If you have a structure like this:
 
 ```
+proj
 ├───index.js
 ├───utils.js
 └───foo
     └───bar
         └───some-file.js
 ```
-Register `require-up` in your main `index.js`:
 ```js
-// index.js
-import 'require-up/register';
+// proj/foo/bar/some-file.js
+const requireUp = require('require-up')
+const { utils } = requireUp('utils')
+```
+It will look for (in this order):
+```
+proj/foo/bar/node_modules/utils
+proj/foo/bar/utils
+proj/foo/node_modules/utils
+proj/foo/utils
+proj/node_modules/utils
+proj/utils # << found
 ```
 
-Now in `some-file.js` you can do:
+## Register
+
+A new syntax (`'.../'`) which will work with regular require/import calls.
+
 ```js
-// some-file.js
-import {stuff} from '.../utils';
+// proj/index.js
+import 'require-up/register'
+```
+```js
+// proj/foo/bar/some-file.js
+import utils from '.../utils'
 ```
 
-## **CAUTION**
 
-**BEWARE**: This module monkey-patches `Module._resolveFilename` in the core [module.js].
+### **CAUTION**
 
-You may also use it as a simple module which doesn't patch anything:
-```js
-import requireUp from 'require-up';
-requireUp('./utils'); // without ".../" syntax
-```
-
-**but** due to NodeJS's require caching it will only be able to require modules up from the **first parent** it was originally required from. For that reason it's recommended actually to use the `/register` method.
+BEWARE: Registering new syntax patches core [module.js]'s `Module._resolveFilename`.
 
 
 [find-up]: https://www.npmjs.com/package/find-up
