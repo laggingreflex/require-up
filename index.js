@@ -10,6 +10,7 @@ function requireUp(requestedModule, {
   getResolvedPath = false,
   paths
 } = {}) {
+  const originalRequestedModule = requestedModule;
   let label = requestedModule
   if (requestedModule.match(/^\.\.\.\//)) {
     requestedModule = requestedModule.split('.../').pop()
@@ -37,9 +38,7 @@ function requireUp(requestedModule, {
       }
     }
   }
-  // If a module was found this line would never have reached
 
-  // If it ever reaches here then an error needs to be thrown
-  // Best way to throw in this case is to just call the NodeJS's internal module, so that it shows the "Module not found" as naturally as it does with regular module requires.
-  return (Module.__resolveFilename || Module._resolveFilename)(label);
+  // If a module was found this line would never have reached
+  return originalRequestedModule;
 }
